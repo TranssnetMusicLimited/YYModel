@@ -660,12 +660,13 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
  */
 static force_inline NSNumber *ModelCreateNumberFromProperty(__unsafe_unretained id model,
                                                             __unsafe_unretained _YYModelPropertyMeta *meta) {
+    /*
+    32位环境BOOL宏定义为 unsigned char，对应如下YYEncodingTypeInt8
+    */
     switch (meta->_type & YYEncodingTypeMask) {
-        case YYEncodingTypeBool: {
-            return @(((bool (*)(id, SEL))(void *) objc_msgSend)((id)model, meta->_getter));
-        }
+        case YYEncodingTypeBool:
         case YYEncodingTypeInt8: {
-            return @(((int8_t (*)(id, SEL))(void *) objc_msgSend)((id)model, meta->_getter));
+            return @(((bool (*)(id, SEL))(void *) objc_msgSend)((id)model, meta->_getter));
         }
         case YYEncodingTypeUInt8: {
             return @(((uint8_t (*)(id, SEL))(void *) objc_msgSend)((id)model, meta->_getter));
@@ -1062,9 +1063,9 @@ static void ModelSetValueForProperty(__unsafe_unretained id model,
                 
             case YYEncodingTypeBlock: {
                 if (isNull) {
-                    ((void (*)(id, SEL, void (^)()))(void *) objc_msgSend)((id)model, meta->_setter, (void (^)())NULL);
+                    ((void (*)(id, SEL, void (^)(void)))(void *) objc_msgSend)((id)model, meta->_setter, (void (^)(void))NULL);
                 } else if ([value isKindOfClass:YYNSBlockClass()]) {
-                    ((void (*)(id, SEL, void (^)()))(void *) objc_msgSend)((id)model, meta->_setter, (void (^)())value);
+                    ((void (*)(id, SEL, void (^)(void)))(void *) objc_msgSend)((id)model, meta->_setter, (void (^)(void))value);
                 }
             } break;
                 
