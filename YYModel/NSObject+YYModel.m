@@ -661,7 +661,7 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
 static force_inline NSNumber *ModelCreateNumberFromProperty(__unsafe_unretained id model,
                                                             __unsafe_unretained _YYModelPropertyMeta *meta) {
     /*
-    32位环境BOOL宏定义为 unsigned char，对应如下YYEncodingTypeInt8
+    32位环境BOOL宏定义为signed char，对应如下YYEncodingTypeInt8
     */
     switch (meta->_type & YYEncodingTypeMask) {
         case YYEncodingTypeBool:
